@@ -5,7 +5,7 @@ import { context } from './js/setup-canvas'
 import Board from './js/Board'
 import './styles/index.scss'
 
-let board = new Board()
+let board = new Board(9, 8)
 // Draw a 9 * 9 grid to start with 
 // key events to navigate around the grid
 // 
