@@ -1,9 +1,14 @@
 // TODO: auto mode
 
 // import { diffArray, medianArray, scale } from './js/utils'
-import { canvasCtx } from './js/setup-canvas'
+import { context } from './js/setup-canvas'
+import Board from './js/Board'
 import './styles/index.scss'
 
+let board = new Board()
+// Draw a 9 * 9 grid to start with 
+// key events to navigate around the grid
+// 
 
 
 const draw = () => {

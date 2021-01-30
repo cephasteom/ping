@@ -11,4 +11,4 @@ export const setCanvasDimensions = () => {
 
 setCanvasDimensions()
 
-export const canvasCtx = getCanvasContext()
+export const context = getCanvasContext()
