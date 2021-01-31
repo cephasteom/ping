@@ -6,7 +6,7 @@ class Board {
         this.cols = cols
         this.rows = rows
         this.size = 40
-        this.cursor = 10
+        this.cursor = {col: 0, row: 0}
         this.initSquares()
         this.drawBoard()
     }
@@ -39,22 +39,20 @@ class Board {
         context.clearRect(0, 0, window.innerWidth, window.innerHeight)
     }
     setCursor(key) {
-        const { cursor, cols, rows, squares } = this
-        let row = Math.floor(cursor / rows)
         switch(key) {
-            case 'ArrowUp': this.cursor = (squares.length + (cursor - cols)) % squares.length
+            case 'ArrowUp': this.cursor.row = (this.rows + (this.cursor.row - 1)) % this.rows
                 break;
-            case 'ArrowDown': this.cursor = (cursor + cols) % squares.length
+            case 'ArrowDown': this.cursor.row = (this.cursor.row + 1) % this.rows
                 break;
-            case 'ArrowLeft': this.cursor = ((cols + (cursor - 1)) % cols) + (row * rows) 
+            case 'ArrowLeft': this.cursor.col = (this.cols + (this.cursor.col - 1)) % this.cols
                 break;
-            case 'ArrowRight': this.cursor = ((cursor + 1) % cols) + (row * rows)
+            case 'ArrowRight': this.cursor.col = (this.cursor.col + 1) % this.cols
         }
     }
     update() {
         this.clearBoard()
         this.drawBoard()
-        this.squares[this.cursor].fill()
+        this.squares[(this.rows * this.cursor.row) + this.cursor.col].fill()
     }
 
 }

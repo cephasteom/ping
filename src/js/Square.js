@@ -1,5 +1,4 @@
 import { context } from './setup-canvas'
-
 class Square {
     constructor(col, row, size) {
         this.col = col
