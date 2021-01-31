@@ -7,7 +7,8 @@ class Square {
     }
     fill() {
         const { col, row, size } = this
-        context.fillStyle = 'rgba(255,255,255,0.25)'
+        context.fillStyle = 'blue'
+        // context.fillStyle = 'rgba(255,255,255,0.25)'
         context.fillRect(col * size, row * size, size, size)
     }
 }
