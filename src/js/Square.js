@@ -23,7 +23,7 @@ class Square {
     }
     fill() {
         const { y, x, size } = this
-        context.fillRect(x, y, size, size)
+        context.fillRect(x + 1, y + 1, size - 2, size - 2)
     }
 }
 

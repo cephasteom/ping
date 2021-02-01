@@ -1,9 +1,11 @@
+// TODO: if blocks arrive at the same time as each other - send out blocks in all directions!
+
 import Board from './js/Board'
 import * as Tone from 'tone'
 import './styles/index.scss'
 
 
-let board = new Board(6, 10)
+let board = new Board(9, 9)
 let animationFrame
 
 
@@ -26,5 +28,5 @@ draw()
 
 Tone.Transport.scheduleRepeat((time) => {
     board.update()
-}, "4n");
+}, "16n");
 Tone.Transport.start();

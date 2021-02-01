@@ -17,7 +17,7 @@ class Board {
                 (i % this.cols), // col
                 Math.floor(i / this.cols), // row
                 this.size,
-                this.getSquareIndexFromColAndRow((i % this.cols), Math.floor(i / this.rows))
+                this.getSquareIndexFromColAndRow((i % this.cols), Math.floor(i / this.cols))
             ))
     }
     getSquareIndexFromColAndRow(col, row) {
