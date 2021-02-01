@@ -15,7 +15,7 @@ class Board {
             .fill(null)
             .map((n, i) => new Square(
                 (i % this.cols), // col
-                Math.floor(i / this.rows), // row
+                Math.floor(i / this.cols), // row
                 this.size,
                 this.getSquareIndexFromColAndRow((i % this.cols), Math.floor(i / this.rows))
             ))
@@ -51,6 +51,7 @@ class Board {
                 break;
             case 'ArrowRight': this.cursor.col = (this.cursor.col + 1) % this.cols
         }
+        console.log(this.cursor)
     }
     createBlock(direction) {
         const i = (this.cursor.row * this.cols) + this.cursor.col
