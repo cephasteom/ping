@@ -1,5 +1,6 @@
 import { context } from './setup-canvas'
 import Square from './Square'
+import Barrier from './Barrier'
 
 class Board {
     constructor(cols, rows) {
@@ -8,6 +9,7 @@ class Board {
         this.size = 40
         this.cursor = 0
         this.squares = this.initSquares()
+        this.barriers = this.initBarriers()
     }
 
     initSquares() {
@@ -18,23 +20,32 @@ class Board {
                 this.size, this.getSquareIndexFromColAndRow((i % this.cols), Math.floor(i / this.cols))
             ))
     }
+
+    initBarriers() {
+        return new Array(this.cols * this.rows)
+            .fill(null)
+            .map((n, i) => new Barrier((i % this.cols), Math.floor(i / this.cols), this.size))
+    }
     
     getSquareIndexFromColAndRow = (col, row) => (this.cols * row) + col
     
     drawBoard() {
         const { size, cols, rows } = this
-        
-        for (var x = 0; x <= cols; x++) {
-            context.moveTo((x * size), 0);
-            context.lineTo((x * size), rows * size);
-        }
-    
-        for (var y = 0; y <= rows; y++) {
-            context.moveTo(0, (y * size));
-            context.lineTo(cols * size , (y * size));
-        }
         context.strokeStyle = 'rgba(255,255,255,0.1)'
-        context.stroke();
+
+        for (var x = 0; x < this.barriers.length; x++) {
+            let barrier = this.barriers[x]
+            if (barrier.left) {
+                context.moveTo(barrier.x, barrier.y);
+                context.lineTo(barrier.x, barrier.y + size);
+                context.stroke();
+            } else if(barrier.top) {
+                context.moveTo(barrier.x, barrier.y);
+                context.lineTo(barrier.x + size, barrier.y);
+                context.stroke();
+            }
+        }
+
     }
 
     clearBoard() {
@@ -57,6 +68,14 @@ class Board {
         this.squares[this.cursor].active = true
         this.squares[this.cursor].direction = direction
     }
+
+    createBarrier(side) {
+        (side === 'l' && (this.barriers[this.cursor].left = !this.barriers[this.cursor].left)) ||
+        (side === 'r' && (this.barriers[this.incrementCol(this.cursor)].left = !this.barriers[this.incrementCol(this.cursor)].left)) ||
+        (side === 't' && (this.barriers[this.cursor].top = !this.barriers[this.cursor].top)) ||
+        (side === 'b' && (this.barriers[this.incrementRow(this.cursor)].top = !this.barriers[this.incrementRow(this.cursor)].top))
+    }
+
     moveBlocks() {
         let newSquares = this.initSquares()
         
@@ -89,12 +108,14 @@ class Board {
 
         this.squares = newSquares
     }
+
     draw() {
         this.clearBoard()
-        // this.drawBoard()
+        this.drawBoard()
         this.squares[this.cursor].fillCursor()
         this.squares.forEach(square => square.active && square.fillBlock())
     }
+
     update() {
         this.moveBlocks()
     }

@@ -11,6 +11,7 @@ let board = new Board(9, 9)
 document.addEventListener('keydown', function(e) {
     if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) board.setCursor(e.key)
     if(['n', 's', 'e', 'w'].includes(e.key)) board.createBlock(e.key)
+    if(['t', 'b', 'l', 'r'].includes(e.key)) board.createBarrier(e.key)
 });
 
 // data and sound

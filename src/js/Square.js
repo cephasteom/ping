@@ -7,6 +7,8 @@ class Square {
         this.i = i
         this.active = false
         this.direction = null
+        this.top = false
+        this.left = false
         this.getXY()
     }
     getXY() {
