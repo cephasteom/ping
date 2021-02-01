@@ -47,17 +47,16 @@ class Board {
     incrementCol = i => (i + 1) % this.cols + (Math.floor(i / this.cols) * this.cols)
 
     setCursor(key) {
-        this.cursor = (key === 'ArrowUp' && this.decrementRow(this.cursor)) ||
-                    (key === 'ArrowDown' && this.incrementRow(this.cursor)) ||
-                    (key === 'ArrowLeft' && this.decrementCol(this.cursor)) ||
-                    (key === 'ArrowRight' && this.incrementCol(this.cursor))
+        (key === 'ArrowUp' && (this.cursor = this.decrementRow(this.cursor))) ||
+        (key === 'ArrowDown' && (this.cursor = this.incrementRow(this.cursor))) ||
+        (key === 'ArrowLeft' && (this.cursor = this.decrementCol(this.cursor))) ||
+        (key === 'ArrowRight' && (this.cursor = this.incrementCol(this.cursor)))
     }
 
     createBlock(direction) {
         this.squares[this.cursor].active = true
         this.squares[this.cursor].direction = direction
     }
-    
     moveBlocks() {
         let newSquares = this.initSquares()
         
