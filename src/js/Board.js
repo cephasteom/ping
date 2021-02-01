@@ -60,7 +60,8 @@ class Board {
     moveBlocks() {
         let newSquares = this.initSquares()
         
-        this.squares.forEach(square => {
+        for (let x = 0; x < this.squares.length; x++) {
+            let square = this.squares[x]
             if(square.active) {
                 let nextSquare
                 let nextDirection
@@ -73,7 +74,7 @@ class Board {
                     case 's':
                         nextSquare = square.row !== this.rows - 1 ? square.i + this.cols : square.i - this.cols
                         nextSquare = this.squares[nextSquare].active ? square.i - this.cols : nextSquare
-                        nextDirection = square.i < nextSquare ? 's' : 'n'
+                        nextDirection = square.i > nextSquare ? 'n' : 's'
                         break;
                     case 'e':
                         nextSquare = square.col !== this.cols - 1 ? square.i + 1 : square.i - 1
@@ -83,12 +84,12 @@ class Board {
                     case 'w':
                         nextSquare = square.col !== 0 ? square.i - 1 : square.i + 1
                         nextSquare = this.squares[nextSquare].active ? square.i + 1 : nextSquare
-                        nextDirection = square.i < nextSquare ? 'e' : 'w'
+                        nextDirection = square.i > nextSquare ? 'w' : 'e'
                 }
                 newSquares[nextSquare].active = true
                 newSquares[nextSquare].direction = nextDirection
             }
-        })
+        }
 
         this.squares = newSquares
     }

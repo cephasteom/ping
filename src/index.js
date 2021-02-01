@@ -21,6 +21,6 @@ Tone.Transport.scheduleRepeat((time) => {
 // visuals
 Tone.Transport.scheduleRepeat((time) => {
     board.draw()
-}, "128n");
+}, "32n");
 
 Tone.Transport.start();
