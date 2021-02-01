@@ -43,8 +43,8 @@ class Board {
 
     decrementRow = i => (this.squares.length + (i - this.cols)) % this.squares.length
     incrementRow = i => (i + this.cols) % this.squares.length
-    decrementCol = i => (this.squares.length + (i - 1)) % this.squares.length
-    incrementCol = i => (i + 1) % this.squares.length
+    decrementCol = i => (this.squares.length + (i - 1)) % this.cols + (Math.floor(i / this.cols) * this.cols)
+    incrementCol = i => (i + 1) % this.cols + (Math.floor(i / this.cols) * this.cols)
 
     setCursor(key) {
         (key === 'ArrowUp' && (this.cursor = this.decrementRow(this.cursor))) ||
@@ -67,24 +67,20 @@ class Board {
                 let nextDirection
                 switch(square.direction) {
                     case 'n':
-                        nextSquare = square.row !== 0 ? square.i - this.cols : square.i + this.cols
-                        nextSquare = this.squares[nextSquare].active ? square.i + this.cols : nextSquare
-                        nextDirection = square.i > nextSquare ? 'n' : 's'
+                        nextSquare = !this.squares[this.decrementRow(square.i)].active ? this.decrementRow(square.i) : this.incrementRow(square.i)
+                        nextDirection = !this.squares[this.decrementRow(square.i)].active ? 'n' : 's'
                         break;
                     case 's':
-                        nextSquare = square.row !== this.rows - 1 ? square.i + this.cols : square.i - this.cols
-                        nextSquare = this.squares[nextSquare].active ? square.i - this.cols : nextSquare
-                        nextDirection = square.i > nextSquare ? 'n' : 's'
+                        nextSquare = !this.squares[this.incrementRow(square.i)].active ? this.incrementRow(square.i) : this.decrementRow(square.i)
+                        nextDirection = !this.squares[this.incrementRow(square.i)].active ? 's' : 'n'
                         break;
                     case 'e':
-                        nextSquare = square.col !== this.cols - 1 ? square.i + 1 : square.i - 1
-                        nextSquare = this.squares[nextSquare].active ? square.i - 1 : nextSquare
-                        nextDirection = square.i > nextSquare ? 'w' : 'e'
+                        nextSquare = !this.squares[this.incrementCol(square.i)].active ? this.incrementCol(square.i) : this.decrementCol(square.i)
+                        nextDirection = !this.squares[this.incrementCol(square.i)].active ? 'e' : 'w'
                         break;
                     case 'w':
-                        nextSquare = square.col !== 0 ? square.i - 1 : square.i + 1
-                        nextSquare = this.squares[nextSquare].active ? square.i + 1 : nextSquare
-                        nextDirection = square.i > nextSquare ? 'w' : 'e'
+                        nextSquare = !this.squares[this.decrementCol(square.i)].active ? this.decrementCol(square.i) : this.incrementCol(square.i)
+                        nextDirection = !this.squares[this.decrementCol(square.i)].active ? 'w' : 'e'
                 }
                 newSquares[nextSquare].active = true
                 newSquares[nextSquare].direction = nextDirection
