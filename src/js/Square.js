@@ -19,6 +19,10 @@ class Square {
         context.fillStyle = 'blue'
         this.fill()
     }
+    clearCursor() {
+        context.fillStyle = 'black'
+        this.fill()
+    }
     fillBlock() {
         context.fillStyle = 'red'
         this.fill()

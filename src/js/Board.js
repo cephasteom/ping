@@ -30,20 +30,10 @@ class Board {
     getSquareIndexFromColAndRow = (col, row) => (this.cols * row) + col
     
     drawBoard() {
-        const { size, cols, rows } = this
-        context.strokeStyle = 'rgba(255,255,255,0.1)'
-
         for (var x = 0; x < this.barriers.length; x++) {
             let barrier = this.barriers[x]
-            if (barrier.left) {
-                context.moveTo(barrier.x, barrier.y);
-                context.lineTo(barrier.x, barrier.y + size);
-                context.stroke();
-            } else if(barrier.top) {
-                context.moveTo(barrier.x, barrier.y);
-                context.lineTo(barrier.x + size, barrier.y);
-                context.stroke();
-            }
+            barrier.left && barrier.fillLeft()
+            barrier.top && barrier.fillTop()
         }
 
     }
@@ -70,10 +60,12 @@ class Board {
     }
 
     createBarrier(side) {
+        
         (side === 'l' && (this.barriers[this.cursor].left = !this.barriers[this.cursor].left)) ||
         (side === 'r' && (this.barriers[this.incrementCol(this.cursor)].left = !this.barriers[this.incrementCol(this.cursor)].left)) ||
         (side === 't' && (this.barriers[this.cursor].top = !this.barriers[this.cursor].top)) ||
         (side === 'b' && (this.barriers[this.incrementRow(this.cursor)].top = !this.barriers[this.incrementRow(this.cursor)].top))
+        
     }
 
     moveBlocks() {
