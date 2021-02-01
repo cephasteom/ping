@@ -6,27 +6,21 @@ import './styles/index.scss'
 
 
 let board = new Board(9, 9)
-let animationFrame
-
-
-// moving blocks
 // obstacles
-
-// handle visual
-const draw = () => {
-    board.draw()
-    animationFrame = window.requestAnimationFrame(draw)
-}
-
 
 document.addEventListener('keydown', function(e) {
     if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) board.setCursor(e.key)
     if(['n', 's', 'e', 'w'].includes(e.key)) board.createBlock(e.key)
 });
 
-draw()
-
+// data and sound
 Tone.Transport.scheduleRepeat((time) => {
     board.update()
-}, "16n");
+}, "8n");
+
+// visuals
+Tone.Transport.scheduleRepeat((time) => {
+    board.draw()
+}, "128n");
+
 Tone.Transport.start();

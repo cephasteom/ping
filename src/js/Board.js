@@ -51,7 +51,6 @@ class Board {
                 break;
             case 'ArrowRight': this.cursor.col = (this.cursor.col + 1) % this.cols
         }
-        console.log(this.cursor)
     }
     createBlock(direction) {
         const i = (this.cursor.row * this.cols) + this.cursor.col
