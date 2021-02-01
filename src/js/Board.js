@@ -7,17 +7,21 @@ class Board {
         this.rows = rows
         this.size = 40
         this.cursor = {col: 0, row: 0}
-        this.initSquares()
+        this.squares = this.initSquares()
         this.drawBoard()
     }
     initSquares() {
-        this.squares = new Array(this.cols * this.rows)
+        return new Array(this.cols * this.rows)
             .fill(null)
             .map((n, i) => new Square(
                 (i % this.cols), // col
                 Math.floor(i / this.rows), // row
-                this.size
+                this.size,
+                this.getSquareIndexFromColAndRow((i % this.cols), Math.floor(i / this.rows))
             ))
+    }
+    getSquareIndexFromColAndRow(col, row) {
+        return (this.cols * row) + col
     }
     drawBoard() {
         const { size, cols, rows } = this
@@ -53,14 +57,49 @@ class Board {
         this.squares[i].active = true
         this.squares[i].direction = direction
     }
+    moveBlocks() {
+        let newSquares = this.initSquares()
+        
+        this.squares.forEach(square => {
+            if(square.active) {
+                let nextSquare
+                let nextDirection
+                switch(square.direction) {
+                    case 'n':
+                        nextSquare = square.row !== 0 ? square.i - this.cols : square.i + this.cols
+                        nextSquare = this.squares[nextSquare].active ? square.i + this.cols : nextSquare
+                        nextDirection = square.i > nextSquare ? 'n' : 's'
+                        break;
+                    case 's':
+                        nextSquare = square.row !== this.rows - 1 ? square.i + this.cols : square.i - this.cols
+                        nextSquare = this.squares[nextSquare].active ? square.i - this.cols : nextSquare
+                        nextDirection = square.i < nextSquare ? 's' : 'n'
+                        break;
+                    case 'e':
+                        nextSquare = square.col !== this.cols - 1 ? square.i + 1 : square.i - 1
+                        nextSquare = this.squares[nextSquare].active ? square.i - 1 : nextSquare
+                        nextDirection = square.i > nextSquare ? 'w' : 'e'
+                        break;
+                    case 'w':
+                        nextSquare = square.col !== 0 ? square.i - 1 : square.i + 1
+                        nextSquare = this.squares[nextSquare].active ? square.i + 1 : nextSquare
+                        nextDirection = square.i < nextSquare ? 'e' : 'w'
+                }
+                newSquares[nextSquare].active = true
+                newSquares[nextSquare].direction = nextDirection
+            }
+        })
+
+        this.squares = newSquares
+    }
     draw() {
         this.clearBoard()
         this.drawBoard()
-        this.squares[(this.rows * this.cursor.row) + this.cursor.col].fillCursor()
+        this.squares[this.getSquareIndexFromColAndRow(this.cursor.col, this.cursor.row)].fillCursor()
         this.squares.forEach(square => square.active && square.fillBlock())
     }
     update() {
-
+        this.moveBlocks()
     }
 
 }

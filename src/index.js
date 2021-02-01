@@ -3,7 +3,7 @@ import * as Tone from 'tone'
 import './styles/index.scss'
 
 
-let board = new Board(10, 10)
+let board = new Board(9, 10)
 let animationFrame
 
 
