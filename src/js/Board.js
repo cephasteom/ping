@@ -6,23 +6,21 @@ class Board {
         this.cols = cols
         this.rows = rows
         this.size = 40
-        this.cursor = {col: 0, row: 0}
+        this.cursor = 0
         this.squares = this.initSquares()
-        this.drawBoard()
     }
+
     initSquares() {
         return new Array(this.cols * this.rows)
             .fill(null)
-            .map((n, i) => new Square(
-                (i % this.cols), // col
-                Math.floor(i / this.cols), // row
-                this.size,
-                this.getSquareIndexFromColAndRow((i % this.cols), Math.floor(i / this.cols))
+            .map((n, i) => new Square( 
+                (i % this.cols), Math.floor(i / this.cols), 
+                this.size, this.getSquareIndexFromColAndRow((i % this.cols), Math.floor(i / this.cols))
             ))
     }
-    getSquareIndexFromColAndRow(col, row) {
-        return (this.cols * row) + col
-    }
+    
+    getSquareIndexFromColAndRow = (col, row) => (this.cols * row) + col
+    
     drawBoard() {
         const { size, cols, rows } = this
         
@@ -38,24 +36,26 @@ class Board {
         context.strokeStyle = 'rgba(255,255,255,0.1)'
         context.stroke();
     }
+
     clearBoard() {
         context.clearRect(0, 0, window.innerWidth, window.innerHeight)
     }
+
+    decrementRow = i => (this.squares.length + (i - this.cols)) % this.squares.length
+    incrementRow = i => (i + this.cols) % this.squares.length
+    decrementCol = i => (this.squares.length + (i - 1)) % this.squares.length
+    incrementCol = i => (i + 1) % this.squares.length
+
     setCursor(key) {
-        switch(key) {
-            case 'ArrowUp': this.cursor.row = (this.rows + (this.cursor.row - 1)) % this.rows
-                break;
-            case 'ArrowDown': this.cursor.row = (this.cursor.row + 1) % this.rows
-                break;
-            case 'ArrowLeft': this.cursor.col = (this.cols + (this.cursor.col - 1)) % this.cols
-                break;
-            case 'ArrowRight': this.cursor.col = (this.cursor.col + 1) % this.cols
-        }
+        (key === 'ArrowUp' && (this.cursor = this.decrementRow(this.cursor))) ||
+        (key === 'ArrowDown' && (this.cursor = this.incrementRow(this.cursor))) ||
+        (key === 'ArrowLeft' && (this.cursor = this.decrementCol(this.cursor))) ||
+        (key === 'ArrowRight' && (this.cursor = this.incrementCol(this.cursor)))
     }
+
     createBlock(direction) {
-        const i = (this.cursor.row * this.cols) + this.cursor.col
-        this.squares[i].active = true
-        this.squares[i].direction = direction
+        this.squares[this.cursor].active = true
+        this.squares[this.cursor].direction = direction
     }
     moveBlocks() {
         let newSquares = this.initSquares()
@@ -96,7 +96,7 @@ class Board {
     draw() {
         this.clearBoard()
         // this.drawBoard()
-        this.squares[this.getSquareIndexFromColAndRow(this.cursor.col, this.cursor.row)].fillCursor()
+        this.squares[this.cursor].fillCursor()
         this.squares.forEach(square => square.active && square.fillBlock())
     }
     update() {
