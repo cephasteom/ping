@@ -4,12 +4,25 @@ class Square {
         this.col = col
         this.row = row
         this.size = size
+        this.active = false
+        this.direction = null
+        this.getXY()
+    }
+    getXY() {
+        this.x = this.col * this.size
+        this.y = this.row * this.size
+    }
+    fillCursor() {
+        context.fillStyle = 'blue'
+        this.fill()
+    }
+    fillBlock() {
+        context.fillStyle = 'red'
+        this.fill()
     }
     fill() {
-        const { col, row, size } = this
-        context.fillStyle = 'blue'
-        // context.fillStyle = 'rgba(255,255,255,0.25)'
-        context.fillRect(col * size, row * size, size, size)
+        const { y, x, size } = this
+        context.fillRect(x, y, size, size)
     }
 }
 

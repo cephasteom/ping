@@ -14,7 +14,7 @@ class Board {
         this.squares = new Array(this.cols * this.rows)
             .fill(null)
             .map((n, i) => new Square(
-                (i % this.cols),
+                (i % this.cols), // col
                 Math.floor(i / this.rows), // row
                 this.size
             ))
@@ -23,19 +23,18 @@ class Board {
         const { size, cols, rows } = this
         
         for (var x = 0; x <= cols; x++) {
-            context.moveTo(0.5 + (x * size), 0);
-            context.lineTo(0.5 + (x * size), rows * size);
+            context.moveTo((x * size), 0);
+            context.lineTo((x * size), rows * size);
         }
     
-        for (var x = 0; x <= rows; x++) {
-            context.moveTo(0, 0.5 + (x * size));
-            context.lineTo(cols * size , 0.5 + (x * size));
+        for (var y = 0; y <= rows; y++) {
+            context.moveTo(0, (y * size));
+            context.lineTo(cols * size , (y * size));
         }
-        context.strokeStyle = "white";
+        context.strokeStyle = 'rgba(255,255,255,0.1)'
         context.stroke();
     }
     clearBoard() {
-        const { size, cols, rows } = this
         context.clearRect(0, 0, window.innerWidth, window.innerHeight)
     }
     setCursor(key) {
@@ -49,10 +48,19 @@ class Board {
             case 'ArrowRight': this.cursor.col = (this.cursor.col + 1) % this.cols
         }
     }
-    update() {
+    createBlock(direction) {
+        const i = (this.cursor.row * this.cols) + this.cursor.col
+        this.squares[i].active = true
+        this.squares[i].direction = direction
+    }
+    draw() {
         this.clearBoard()
         this.drawBoard()
-        this.squares[(this.rows * this.cursor.row) + this.cursor.col].fill()
+        this.squares[(this.rows * this.cursor.row) + this.cursor.col].fillCursor()
+        this.squares.forEach(square => square.active && square.fillBlock())
+    }
+    update() {
+
     }
 
 }
