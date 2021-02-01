@@ -95,14 +95,13 @@ class Board {
     }
     draw() {
         this.clearBoard()
-        this.drawBoard()
+        // this.drawBoard()
         this.squares[this.getSquareIndexFromColAndRow(this.cursor.col, this.cursor.row)].fillCursor()
         this.squares.forEach(square => square.active && square.fillBlock())
     }
     update() {
         this.moveBlocks()
     }
-
 }
 
 export default Board
