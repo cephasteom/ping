@@ -25,7 +25,7 @@ class Barrier {
         this.fill()
     }
     fill() {
-        context.stroke();
+        context.stroke()
     }
     clearLeft() {
         context.strokeStyle = 'black'
@@ -38,9 +38,6 @@ class Barrier {
         context.moveTo(this.x, this.y);
         context.lineTo(this.x + this.size, this.y);
         this.fill()
-    }
-    clear() {
-        context.stroke();
     }
 }
 

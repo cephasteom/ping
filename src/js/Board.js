@@ -60,11 +60,11 @@ class Board {
     }
 
     createBarrier(side) {
-        
         (side === 'l' && (this.barriers[this.cursor].left = !this.barriers[this.cursor].left)) ||
         (side === 'r' && (this.barriers[this.incrementCol(this.cursor)].left = !this.barriers[this.incrementCol(this.cursor)].left)) ||
         (side === 't' && (this.barriers[this.cursor].top = !this.barriers[this.cursor].top)) ||
         (side === 'b' && (this.barriers[this.incrementRow(this.cursor)].top = !this.barriers[this.incrementRow(this.cursor)].top))
+        console.log( this.barriers[this.cursor] )
         
     }
 
