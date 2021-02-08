@@ -72,10 +72,15 @@ class Board {
 
     createBarrier(side) {
         (side === 'l' && (this.setBarrierL(this.cursor))) ||
-        (side === 'r' && (this.setBarrierL(this.incrementCol(this.cursor))) ||
-        (side === 't' && (this.setBarrierT(this.cursor)) ||
-        (side === 'b' && (this.setBarrierT(this.incrementRow(this.cursor)))    
+        (side === 'r' && (this.setBarrierL(this.incrementCol(this.cursor)))) ||
+        (side === 't' && (this.setBarrierT(this.cursor))) ||
+        (side === 'b' && (this.setBarrierT(this.incrementRow(this.cursor))))
     }
+
+    hasCollidedN = (i) => this.squares[this.decrementRow(i)].active || this.barriers[i].top
+    hasCollidedS = (i) => this.squares[this.incrementRow(i)].active || this.barriers[i].bottom
+    hasCollidedE = (i) => this.squares[this.incrementCol(i)].active || this.barriers[i].right
+    hasCollidedW = (i) => this.squares[this.decrementCol(i)].active || this.barriers[i].left
 
     calculateBlocks() {
         let newSquares = this.initSquares()
@@ -83,26 +88,26 @@ class Board {
         for (let x = 0; x < this.squares.length; x++) {
             let square = this.squares[x]
             if(square.active) {
+                let thisSquare = square.i
                 let nextSquare
                 let nextDirection
                 let thisBarrier = this.barriers[square.i]
                 switch(square.direction) {
                     case 'n':
-                        let up = this.decrementRow(square.i)
-                        nextSquare = this.squares[up].active || thisBarrier.top ? this.incrementRow(square.i) : up
-                        nextDirection = this.squares[up].active || thisBarrier.top ? 's' : 'n'
+                        nextSquare = this.hasCollidedN(thisSquare) ? this.incrementRow(thisSquare) : this.decrementRow(thisSquare)
+                        nextDirection = this.hasCollidedN(thisSquare) ? 's' : 'n'
                         break;
                     case 's':
-                        nextSquare = this.squares[this.incrementRow(square.i)].active || thisBarrier.bottom ? this.decrementRow(square.i) : this.incrementRow(square.i)
-                        nextDirection = this.squares[this.incrementRow(square.i)].active || thisBarrier.bottom ? 'n' : 's'
+                        nextSquare = this.hasCollidedS(thisSquare) ? this.decrementRow(square.i) : this.incrementRow(square.i)
+                        nextDirection = this.hasCollidedS(thisSquare) ? 'n' : 's'
                         break;
                     case 'e':
-                        nextSquare = this.squares[this.incrementCol(square.i)].active || thisBarrier.right ? this.decrementCol(square.i) : this.incrementCol(square.i)
-                        nextDirection = this.squares[this.incrementCol(square.i)].active || thisBarrier.right? 'w' : 'e'
+                        nextSquare = this.hasCollidedE(thisSquare)  ? this.decrementCol(square.i) : this.incrementCol(square.i)
+                        nextDirection = this.hasCollidedE(thisSquare) ? 'w' : 'e'
                         break;
                     case 'w':
-                        nextSquare = this.squares[this.decrementCol(square.i)].active || thisBarrier.left ? this.incrementCol(square.i) : this.decrementCol(square.i)
-                        nextDirection = this.squares[this.decrementCol(square.i)].active || thisBarrier.left ? 'e' : 'w'
+                        nextSquare = this.hasCollidedW(thisSquare) ? this.incrementCol(square.i) : this.decrementCol(square.i)
+                        nextDirection = this.hasCollidedW(thisSquare) ? 'e' : 'w'
                 }
                 newSquares[nextSquare].active = true
                 newSquares[nextSquare].direction = nextDirection
