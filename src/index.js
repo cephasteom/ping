@@ -5,7 +5,7 @@ import * as Tone from 'tone'
 import './styles/index.scss'
 
 
-let board = new Board(9, 9)
+let board = new Board(16, 16)
 // obstacles
 
 document.addEventListener('keydown', function(e) {
@@ -14,14 +14,14 @@ document.addEventListener('keydown', function(e) {
     if(['t', 'b', 'l', 'r'].includes(e.key)) board.createBarrier(e.key)
 });
 
-// data and sound
-Tone.Transport.scheduleRepeat((time) => {
-    board.update()
-}, "8n");
+// data - calculate on every off 16th to give it time to calculate
+const dataLoop = new Tone.Loop(() => {
+    board.calculateBlocks()
+}, "8n").start("16n");
 
-// visuals
-Tone.Transport.scheduleRepeat((time) => {
+// visuals / sound - draw on every 4th 
+const eventLoop = new Tone.Loop(() => {
     board.draw()
-}, "32n");
+}, "8n").start(0);
 
 Tone.Transport.start();

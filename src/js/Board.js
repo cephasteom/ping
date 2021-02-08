@@ -48,10 +48,12 @@ class Board {
     incrementCol = i => (i + 1) % this.cols + (Math.floor(i / this.cols) * this.cols)
 
     setCursor(key) {
+        this.squares[this.cursor].clearCursor();
         (key === 'ArrowUp' && (this.cursor = this.decrementRow(this.cursor))) ||
         (key === 'ArrowDown' && (this.cursor = this.incrementRow(this.cursor))) ||
         (key === 'ArrowLeft' && (this.cursor = this.decrementCol(this.cursor))) ||
         (key === 'ArrowRight' && (this.cursor = this.incrementCol(this.cursor)))
+        this.squares[this.cursor].fillCursor()
     }
 
     createBlock(direction) {
@@ -64,11 +66,9 @@ class Board {
         (side === 'r' && (this.barriers[this.incrementCol(this.cursor)].left = !this.barriers[this.incrementCol(this.cursor)].left)) ||
         (side === 't' && (this.barriers[this.cursor].top = !this.barriers[this.cursor].top)) ||
         (side === 'b' && (this.barriers[this.incrementRow(this.cursor)].top = !this.barriers[this.incrementRow(this.cursor)].top))
-        console.log( this.barriers[this.cursor] )
-        
     }
 
-    moveBlocks() {
+    calculateBlocks() {
         let newSquares = this.initSquares()
         
         for (let x = 0; x < this.squares.length; x++) {
@@ -106,10 +106,6 @@ class Board {
         this.drawBoard()
         this.squares[this.cursor].fillCursor()
         this.squares.forEach(square => square.active && square.fillBlock())
-    }
-
-    update() {
-        this.moveBlocks()
     }
 }
 
