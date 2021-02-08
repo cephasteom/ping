@@ -3,6 +3,8 @@ class Barrier {
     constructor(col, row, size) {
         this.top = false
         this.left = false
+        this.bottom = false
+        this.right = false
         this.col = col
         this.row = row
         this.size = size
@@ -11,6 +13,10 @@ class Barrier {
     getXY() {
         this.x = this.col * this.size
         this.y = this.row * this.size
+    }
+    draw() {
+        this.left && this.fillLeft()
+        this.top && this.fillTop()
     }
     fillLeft() {
         context.strokeStyle = 'white'

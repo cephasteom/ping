@@ -31,11 +31,8 @@ class Board {
     
     drawBoard() {
         for (var x = 0; x < this.barriers.length; x++) {
-            let barrier = this.barriers[x]
-            barrier.left && barrier.fillLeft()
-            barrier.top && barrier.fillTop()
+            this.barriers[x].draw()
         }
-
     }
 
     clearBoard() {
@@ -66,6 +63,16 @@ class Board {
         (side === 'r' && (this.barriers[this.incrementCol(this.cursor)].left = !this.barriers[this.incrementCol(this.cursor)].left)) ||
         (side === 't' && (this.barriers[this.cursor].top = !this.barriers[this.cursor].top)) ||
         (side === 'b' && (this.barriers[this.incrementRow(this.cursor)].top = !this.barriers[this.incrementRow(this.cursor)].top))
+        // copy l and t data to r and l
+        // let newBarriers = this.initBarriers()
+        // this.barriers.forEach((barrier, i) => {
+        //     newBarriers[i].left = barrier.left
+        //     newBarriers[i].top = barrier.top
+        //     newBarriers[this.decrementCol(i)].right = barrier.left
+        //     newBarriers[this.decrementRow(i)].bottom = barrier.top
+        // })
+        // this.barriers = newBarriers
+
     }
 
     calculateBlocks() {
