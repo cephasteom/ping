@@ -8,6 +8,7 @@ class Board {
         this.rows = rows
         this.size = 40
         this.cursor = 0
+        this.cursorStatic = 0
         this.squares = this.initSquares()
         this.barriers = this.initBarriers()
     }
@@ -51,6 +52,7 @@ class Board {
         (key === 'ArrowLeft' && (this.cursor = this.decrementCol(this.cursor))) ||
         (key === 'ArrowRight' && (this.cursor = this.incrementCol(this.cursor)))
         this.squares[this.cursor].fillCursor()
+        this.cursorStatic = 0
     }
 
     createBlock(direction) {
@@ -64,16 +66,14 @@ class Board {
         (side === 't' && (this.barriers[this.cursor].top = !this.barriers[this.cursor].top)) ||
         (side === 'b' && (this.barriers[this.incrementRow(this.cursor)].top = !this.barriers[this.incrementRow(this.cursor)].top))
         // copy l and t data to r and l
-        console.log(this.barriers)
-        // let newBarriers = this.initBarriers()
-        // this.barriers.forEach((barrier, i) => {
-        //     newBarriers[i].left = barrier.left
-        //     newBarriers[i].top = barrier.top
-        //     newBarriers[this.decrementCol(i)].right = barrier.left
-        //     newBarriers[this.decrementRow(i)].bottom = barrier.top
-        // })
-        // this.barriers = newBarriers
-
+        let newBarriers = this.initBarriers()
+        this.barriers.forEach((barrier, i) => {
+            newBarriers[i].left = barrier.left
+            newBarriers[i].top = barrier.top
+            newBarriers[this.decrementCol(i)].right = barrier.left
+            newBarriers[this.decrementRow(i)].bottom = barrier.top
+        })
+        this.barriers = newBarriers
     }
 
     calculateBlocks() {
@@ -84,22 +84,24 @@ class Board {
             if(square.active) {
                 let nextSquare
                 let nextDirection
+                let thisBarrier = this.barriers[square.i]
                 switch(square.direction) {
                     case 'n':
-                        nextSquare = !this.squares[this.decrementRow(square.i)].active ? this.decrementRow(square.i) : this.incrementRow(square.i)
-                        nextDirection = !this.squares[this.decrementRow(square.i)].active ? 'n' : 's'
+                        let up = this.decrementRow(square.i)
+                        nextSquare = this.squares[up].active || thisBarrier.top ? this.incrementRow(square.i) : up
+                        nextDirection = this.squares[up].active || thisBarrier.top ? 's' : 'n'
                         break;
                     case 's':
-                        nextSquare = !this.squares[this.incrementRow(square.i)].active ? this.incrementRow(square.i) : this.decrementRow(square.i)
-                        nextDirection = !this.squares[this.incrementRow(square.i)].active ? 's' : 'n'
+                        nextSquare = this.squares[this.incrementRow(square.i)].active || thisBarrier.bottom ? this.decrementRow(square.i) : this.incrementRow(square.i)
+                        nextDirection = this.squares[this.incrementRow(square.i)].active || thisBarrier.bottom ? 'n' : 's'
                         break;
                     case 'e':
-                        nextSquare = !this.squares[this.incrementCol(square.i)].active ? this.incrementCol(square.i) : this.decrementCol(square.i)
-                        nextDirection = !this.squares[this.incrementCol(square.i)].active ? 'e' : 'w'
+                        nextSquare = this.squares[this.incrementCol(square.i)].active || thisBarrier.right ? this.decrementCol(square.i) : this.incrementCol(square.i)
+                        nextDirection = this.squares[this.incrementCol(square.i)].active || thisBarrier.right? 'w' : 'e'
                         break;
                     case 'w':
-                        nextSquare = !this.squares[this.decrementCol(square.i)].active ? this.decrementCol(square.i) : this.incrementCol(square.i)
-                        nextDirection = !this.squares[this.decrementCol(square.i)].active ? 'w' : 'e'
+                        nextSquare = this.squares[this.decrementCol(square.i)].active || thisBarrier.left ? this.incrementCol(square.i) : this.decrementCol(square.i)
+                        nextDirection = this.squares[this.decrementCol(square.i)].active || thisBarrier.left ? 'e' : 'w'
                 }
                 newSquares[nextSquare].active = true
                 newSquares[nextSquare].direction = nextDirection
@@ -107,12 +109,13 @@ class Board {
         }
 
         this.squares = newSquares
+        this.cursorStatic++
     }
 
     draw() {
-        this.clearBoard()
-        this.drawBoard()
-        this.squares[this.cursor].fillCursor()
+        this.clearBoard();
+        this.drawBoard();
+        this.cursorStatic < 5 && this.squares[this.cursor].fillCursor();
         this.squares.forEach(square => square.active && square.fillBlock())
     }
 }

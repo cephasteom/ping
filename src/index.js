@@ -5,7 +5,7 @@ import * as Tone from 'tone'
 import './styles/index.scss'
 
 
-let board = new Board(16, 16)
+let board = new Board(10, 10)
 // obstacles
 
 document.addEventListener('keydown', function(e) {
