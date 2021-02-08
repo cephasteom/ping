@@ -11,6 +11,7 @@ class Board {
         this.cursorStatic = 0
         this.squares = this.initSquares()
         this.barriers = this.initBarriers()
+        this.synths = []
     }
 
     initSquares() {
@@ -18,7 +19,7 @@ class Board {
             .fill(null)
             .map((n, i) => new Square( 
                 (i % this.cols), Math.floor(i / this.cols), 
-                this.size, this.getSquareIndexFromColAndRow((i % this.cols), Math.floor(i / this.cols))
+                this.size, this.getSquareIndex((i % this.cols), Math.floor(i / this.cols))
             ))
     }
 
@@ -28,7 +29,7 @@ class Board {
             .map((n, i) => new Barrier((i % this.cols), Math.floor(i / this.cols), this.size))
     }
     
-    getSquareIndexFromColAndRow = (col, row) => (this.cols * row) + col
+    getSquareIndex = (col, row) => (this.cols * row) + col
     
     drawBoard() {
         for (var x = 0; x < this.barriers.length; x++) {
@@ -91,7 +92,6 @@ class Board {
                 let thisSquare = square.i
                 let nextSquare
                 let nextDirection
-                let thisBarrier = this.barriers[square.i]
                 switch(square.direction) {
                     case 'n':
                         nextSquare = this.hasCollidedN(thisSquare) ? this.incrementRow(thisSquare) : this.decrementRow(thisSquare)
