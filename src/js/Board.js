@@ -60,20 +60,21 @@ class Board {
         this.squares[this.cursor].direction = direction
     }
 
+    setBarrierL(i) {
+        this.barriers[i].left = !this.barriers[i].left
+        this.barriers[this.decrementCol(i)].right = this.barriers[i].left
+    }
+
+    setBarrierT(i) {
+        this.barriers[i].top = !this.barriers[i].top
+        this.barriers[this.decrementRow(i)].bottom = this.barriers[i].top
+    }
+
     createBarrier(side) {
-        (side === 'l' && (this.barriers[this.cursor].left = !this.barriers[this.cursor].left)) ||
-        (side === 'r' && (this.barriers[this.incrementCol(this.cursor)].left = !this.barriers[this.incrementCol(this.cursor)].left)) ||
-        (side === 't' && (this.barriers[this.cursor].top = !this.barriers[this.cursor].top)) ||
-        (side === 'b' && (this.barriers[this.incrementRow(this.cursor)].top = !this.barriers[this.incrementRow(this.cursor)].top))
-        // copy l and t data to r and l
-        let newBarriers = this.initBarriers()
-        this.barriers.forEach((barrier, i) => {
-            newBarriers[i].left = barrier.left
-            newBarriers[i].top = barrier.top
-            newBarriers[this.decrementCol(i)].right = barrier.left
-            newBarriers[this.decrementRow(i)].bottom = barrier.top
-        })
-        this.barriers = newBarriers
+        (side === 'l' && (this.setBarrierL(this.cursor))) ||
+        (side === 'r' && (this.setBarrierL(this.incrementCol(this.cursor))) ||
+        (side === 't' && (this.setBarrierT(this.cursor)) ||
+        (side === 'b' && (this.setBarrierT(this.incrementRow(this.cursor)))    
     }
 
     calculateBlocks() {
