@@ -19,12 +19,14 @@ class Barrier {
         this.top && this.fillTop()
     }
     fillLeft() {
+        context.beginPath()
         context.strokeStyle = 'white'
         context.moveTo(this.x, this.y);
         context.lineTo(this.x, this.y + this.size);
         this.fill()
     }
     fillTop() {
+        context.beginPath()
         context.strokeStyle = 'white'
         context.moveTo(this.x, this.y);
         context.lineTo(this.x + this.size, this.y);

@@ -64,6 +64,7 @@ class Board {
         (side === 't' && (this.barriers[this.cursor].top = !this.barriers[this.cursor].top)) ||
         (side === 'b' && (this.barriers[this.incrementRow(this.cursor)].top = !this.barriers[this.incrementRow(this.cursor)].top))
         // copy l and t data to r and l
+        console.log(this.barriers)
         // let newBarriers = this.initBarriers()
         // this.barriers.forEach((barrier, i) => {
         //     newBarriers[i].left = barrier.left
