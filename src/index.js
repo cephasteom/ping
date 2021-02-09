@@ -15,12 +15,16 @@ document.addEventListener('keydown', function(e) {
 
 // data - calculate on every off 16th to give it time to calculate
 new Tone.Loop(() => {
-    board.calculateBlocks()
+    board.calculateEvents()
 }, "8n").start("16n");
 
 // visuals / sound - draw on every 4th 
 new Tone.Loop(() => {
     board.draw()
+}, "8n").start(0);
+
+new Tone.Loop(() => {
+    board.play()
 }, "8n").start(0);
 
 Tone.Transport.start();

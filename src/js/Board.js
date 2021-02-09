@@ -14,11 +14,9 @@ class Board {
         this.barriers = this.initBarriers()
         this.synths = []
         this.notes = this.initNotes(scale)
-        console.log(this.notes)
     }
 
     initNotes(scale) {
-        // map scale across single row
         const singleRow = new Array(this.cols).fill(null)
             .map((n, i) => `${scale[i % scale.length]}${Math.floor((i % this.cols) / scale.length) + 3}`)
 
@@ -95,7 +93,7 @@ class Board {
     hasCollidedE = (i) => this.squares[this.incrementCol(i)].active || this.barriers[i].right
     hasCollidedW = (i) => this.squares[this.decrementCol(i)].active || this.barriers[i].left
 
-    calculateBlocks() {
+    calculateEvents() {
         let newSquares = this.initSquares()
         
         for (let x = 0; x < this.squares.length; x++) {
@@ -104,23 +102,29 @@ class Board {
                 let thisSquare = square.i
                 let nextSquare
                 let nextDirection
+                let hasCollided
                 switch(square.direction) {
                     case 'n':
-                        nextSquare = this.hasCollidedN(thisSquare) ? this.incrementRow(thisSquare) : this.decrementRow(thisSquare)
-                        nextDirection = this.hasCollidedN(thisSquare) ? 's' : 'n'
+                        hasCollided = this.hasCollidedN(thisSquare)
+                        nextSquare = hasCollided ? this.incrementRow(thisSquare) : this.decrementRow(thisSquare)
+                        nextDirection = hasCollided ? 's' : 'n'
                         break;
                     case 's':
-                        nextSquare = this.hasCollidedS(thisSquare) ? this.decrementRow(square.i) : this.incrementRow(square.i)
-                        nextDirection = this.hasCollidedS(thisSquare) ? 'n' : 's'
+                        hasCollided = this.hasCollidedS(thisSquare)
+                        nextSquare = hasCollided ? this.decrementRow(square.i) : this.incrementRow(square.i)
+                        nextDirection = hasCollided ? 'n' : 's'
                         break;
                     case 'e':
-                        nextSquare = this.hasCollidedE(thisSquare)  ? this.decrementCol(square.i) : this.incrementCol(square.i)
-                        nextDirection = this.hasCollidedE(thisSquare) ? 'w' : 'e'
+                        hasCollided = this.hasCollidedE(thisSquare)
+                        nextSquare = hasCollided  ? this.decrementCol(square.i) : this.incrementCol(square.i)
+                        nextDirection = hasCollided ? 'w' : 'e'
                         break;
                     case 'w':
-                        nextSquare = this.hasCollidedW(thisSquare) ? this.incrementCol(square.i) : this.decrementCol(square.i)
-                        nextDirection = this.hasCollidedW(thisSquare) ? 'e' : 'w'
-                }
+                        hasCollided = this.hasCollidedW(thisSquare)
+                        nextSquare = hasCollided ? this.incrementCol(square.i) : this.decrementCol(square.i)
+                        nextDirection = hasCollided ? 'e' : 'w'
+                };
+                (hasCollided && (this.notes[thisSquare].active = true))
                 newSquares[nextSquare].active = true
                 newSquares[nextSquare].direction = nextDirection
             }
@@ -135,6 +139,10 @@ class Board {
         this.drawBoard();
         this.cursorStatic < 5 && this.squares[this.cursor].fillCursor();
         this.squares.forEach(square => square.active && square.fillBlock())
+    }
+
+    play() {
+        this.notes.forEach(note => note.active && note.play())
     }
 }
 
