@@ -1,17 +1,29 @@
 import { context } from './setup-canvas'
 import Square from './Square'
+import Note from './Note'
 import Barrier from './Barrier'
 
 class Board {
-    constructor(cols, rows) {
+    constructor(cols, rows, scale) {
         this.cols = cols
         this.rows = rows
-        this.size = 40
+        this.size = 20
         this.cursor = 0
         this.cursorStatic = 0
         this.squares = this.initSquares()
         this.barriers = this.initBarriers()
         this.synths = []
+        this.notes = this.initNotes(scale)
+        console.log(this.notes)
+    }
+
+    initNotes(scale) {
+        // map scale across single row
+        const singleRow = new Array(this.cols).fill(null)
+            .map((n, i) => `${scale[i % scale.length]}${Math.floor((i % this.cols) / scale.length) + 3}`)
+
+        return new Array(this.cols * this.rows).fill(null)
+            .map((n, i) => new Note(singleRow[ i % this.cols ]))
     }
 
     initSquares() {
