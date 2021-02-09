@@ -124,7 +124,6 @@ class Board {
                         nextSquare = hasCollided ? this.incrementCol(square.i) : this.decrementCol(square.i)
                         nextDirection = hasCollided ? 'e' : 'w'
                 };
-                (hasCollided && (this.notes[thisSquare].active = true))
                 newSquares[nextSquare].active = true
                 newSquares[nextSquare].direction = nextDirection
             }
@@ -142,7 +141,27 @@ class Board {
     }
 
     play() {
-        this.notes.forEach(note => note.active && note.play())
+        for (let x = 0; x < this.squares.length; x++) {
+            let square = this.squares[x]
+            if(square.active) {
+                let thisSquare = square.i
+                let hasCollided
+                switch(square.direction) {
+                    case 'n':
+                        hasCollided = this.hasCollidedN(thisSquare)
+                        break;
+                    case 's':
+                        hasCollided = this.hasCollidedS(thisSquare)
+                        break;
+                    case 'e':
+                        hasCollided = this.hasCollidedE(thisSquare)
+                        break;
+                    case 'w':
+                        hasCollided = this.hasCollidedW(thisSquare)
+                };
+                (hasCollided && (this.notes[thisSquare].play()))
+            }
+        }
     }
 }
 
