@@ -2,6 +2,7 @@ import { context } from './setup-canvas'
 import Square from './Square'
 import Note from './Note'
 import Barrier from './Barrier'
+import Block from './Block'
 
 class Board {
     constructor(cols, rows, scale) {
@@ -12,8 +13,8 @@ class Board {
         this.cursorStatic = 0
         this.squares = this.initSquares()
         this.barriers = this.initBarriers()
-        this.synths = []
         this.notes = this.initNotes(scale)
+        this.blocks = []
     }
 
     initNotes(scale) {
@@ -67,8 +68,9 @@ class Board {
     }
 
     createBlock(direction) {
-        this.squares[this.cursor].active = true
-        this.squares[this.cursor].direction = direction
+        this.blocks.push(new Block(this.cursor, direction))
+        // this.squares[this.cursor].active = true
+        // this.squares[this.cursor].direction = direction
     }
 
     setBarrierL(i) {
@@ -88,48 +90,42 @@ class Board {
         (side === 'b' && (this.setBarrierT(this.incrementRow(this.cursor))))
     }
 
-    hasCollidedN = (i) => this.squares[this.decrementRow(i)].active || this.barriers[i].top
-    hasCollidedS = (i) => this.squares[this.incrementRow(i)].active || this.barriers[i].bottom
-    hasCollidedE = (i) => this.squares[this.incrementCol(i)].active || this.barriers[i].right
-    hasCollidedW = (i) => this.squares[this.decrementCol(i)].active || this.barriers[i].left
+    hasCollidedN = (i) => this.blocks.find(block => block.i === this.decrementRow(i)) || this.barriers[i].top
+    hasCollidedS = (i) => this.blocks.find(block => block.i === this.incrementRow(i)) || this.barriers[i].bottom
+    hasCollidedE = (i) => this.blocks.find(block => block.i === this.incrementCol(i)) || this.barriers[i].right
+    hasCollidedW = (i) => this.blocks.find(block => block.i === this.decrementCol(i)) || this.barriers[i].left
 
     calculateEvents() {
-        let newSquares = this.initSquares()
-        
-        for (let x = 0; x < this.squares.length; x++) {
-            let square = this.squares[x]
-            if(square.active) {
-                let thisSquare = square.i
-                let nextSquare
-                let nextDirection
-                let hasCollided
-                switch(square.direction) {
-                    case 'n':
-                        hasCollided = this.hasCollidedN(thisSquare)
-                        nextSquare = hasCollided ? this.incrementRow(thisSquare) : this.decrementRow(thisSquare)
-                        nextDirection = hasCollided ? 's' : 'n'
-                        break;
-                    case 's':
-                        hasCollided = this.hasCollidedS(thisSquare)
-                        nextSquare = hasCollided ? this.decrementRow(square.i) : this.incrementRow(square.i)
-                        nextDirection = hasCollided ? 'n' : 's'
-                        break;
-                    case 'e':
-                        hasCollided = this.hasCollidedE(thisSquare)
-                        nextSquare = hasCollided  ? this.decrementCol(square.i) : this.incrementCol(square.i)
-                        nextDirection = hasCollided ? 'w' : 'e'
-                        break;
-                    case 'w':
-                        hasCollided = this.hasCollidedW(thisSquare)
-                        nextSquare = hasCollided ? this.incrementCol(square.i) : this.decrementCol(square.i)
-                        nextDirection = hasCollided ? 'e' : 'w'
-                };
-                newSquares[nextSquare].active = true
-                newSquares[nextSquare].direction = nextDirection
-            }
+        let newBlocks = []
+        for (let x = 0; x < this.blocks.length; x++) {
+            const { i, direction } = this.blocks[x]
+            let nextI
+            let nextDirection
+            let hasCollided
+            switch(direction) {
+                case 'n':
+                    hasCollided = this.hasCollidedN(i)
+                    nextI = hasCollided ? this.incrementRow(i) : this.decrementRow(i)
+                    nextDirection = hasCollided ? 's' : 'n'
+                    break;
+                case 's':
+                    hasCollided = this.hasCollidedS(i)
+                    nextI = hasCollided ? this.decrementRow(i) : this.incrementRow(i)
+                    nextDirection = hasCollided ? 'n' : 's'
+                    break;
+                case 'e':
+                    hasCollided = this.hasCollidedE(i)
+                    nextI = hasCollided  ? this.decrementCol(i) : this.incrementCol(i)
+                    nextDirection = hasCollided ? 'w' : 'e'
+                    break;
+                case 'w':
+                    hasCollided = this.hasCollidedW(i)
+                    nextI = hasCollided ? this.incrementCol(i) : this.decrementCol(i)
+                    nextDirection = hasCollided ? 'e' : 'w'
+            };
+            newBlocks.push(new Block(nextI, nextDirection))
         }
-
-        this.squares = newSquares
+        this.blocks = newBlocks
         this.cursorStatic++
     }
 
@@ -137,32 +133,32 @@ class Board {
         this.clearBoard();
         this.drawBoard();
         this.cursorStatic < 5 && this.squares[this.cursor].fillCursor();
-        this.squares.forEach(square => square.active && square.fillBlock())
+        this.blocks.forEach( ({i}) => this.squares[i].fillBlock())
     }
 
-    play() {
-        for (let x = 0; x < this.squares.length; x++) {
-            let square = this.squares[x]
-            if(square.active) {
-                let thisSquare = square.i
-                let hasCollided
-                switch(square.direction) {
-                    case 'n':
-                        hasCollided = this.hasCollidedN(thisSquare)
-                        break;
-                    case 's':
-                        hasCollided = this.hasCollidedS(thisSquare)
-                        break;
-                    case 'e':
-                        hasCollided = this.hasCollidedE(thisSquare)
-                        break;
-                    case 'w':
-                        hasCollided = this.hasCollidedW(thisSquare)
-                };
-                (hasCollided && (this.notes[thisSquare].play()))
-            }
-        }
-    }
+    // play() {
+    //     for (let x = 0; x < this.squares.length; x++) {
+    //         let square = this.squares[x]
+    //         if(square.active) {
+    //             let thisSquare = square.i
+    //             let hasCollided
+    //             switch(square.direction) {
+    //                 case 'n':
+    //                     hasCollided = this.hasCollidedN(thisSquare)
+    //                     break;
+    //                 case 's':
+    //                     hasCollided = this.hasCollidedS(thisSquare)
+    //                     break;
+    //                 case 'e':
+    //                     hasCollided = this.hasCollidedE(thisSquare)
+    //                     break;
+    //                 case 'w':
+    //                     hasCollided = this.hasCollidedW(thisSquare)
+    //             };
+    //             (hasCollided && (this.notes[thisSquare].play()))
+    //         }
+    //     }
+    // }
 }
 
 export default Board

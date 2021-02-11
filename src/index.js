@@ -1,5 +1,8 @@
 // TODO: if blocks arrive at the same time as each other - send out blocks in all directions!
 
+// Blocks to their own array / type so that you don't have to iterate over all squares
+// barriers become part of squares
+
 import Board from './js/Board'
 import * as Tone from 'tone'
 import './styles/index.scss'
@@ -23,8 +26,8 @@ new Tone.Loop(() => {
     board.draw()
 }, "8n").start(0);
 
-new Tone.Loop(() => {
-    board.play()
-}, "8n").start(0);
+// new Tone.Loop(() => {
+//     board.play()
+// }, "8n").start(0);
 
 Tone.Transport.start();
