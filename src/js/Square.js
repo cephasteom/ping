@@ -23,8 +23,8 @@ class Square {
         context.fillStyle = 'black'
         this.fill()
     }
-    fillBlock() {
-        context.fillStyle = 'red'
+    fillBlock(colour = 'red') {
+        context.fillStyle = colour
         this.fill()
     }
     fill() {

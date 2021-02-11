@@ -15,6 +15,7 @@ class Board {
         this.barriers = this.initBarriers()
         this.notes = this.initNotes(scale)
         this.blocks = []
+        this.duplicates = [] // when blocks arrive at the same square together
     }
 
     initNotes(scale) {
@@ -48,7 +49,7 @@ class Board {
         }
     }
 
-    clearBoard() {
+    clear() {
         context.clearRect(0, 0, window.innerWidth, window.innerHeight)
     }
 
@@ -69,8 +70,6 @@ class Board {
 
     createBlock(direction) {
         this.blocks.push(new Block(this.cursor, direction))
-        // this.squares[this.cursor].active = true
-        // this.squares[this.cursor].direction = direction
     }
 
     setBarrierL(i) {
@@ -123,17 +122,24 @@ class Board {
                     nextI = hasCollided ? this.incrementCol(i) : this.decrementCol(i)
                     nextDirection = hasCollided ? 'e' : 'w'
             };
-            newBlocks.push(new Block(nextI, nextDirection))
+            let duplicate = newBlocks.find(block => block.i === nextI)
+            duplicate ? 
+                (newBlocks = newBlocks.filter(block => block !== duplicate)) && this.duplicates.push(duplicate.i)
+                : 
+                newBlocks.push(new Block(nextI, nextDirection));
+            
         }
         this.blocks = newBlocks
         this.cursorStatic++
     }
 
     draw() {
-        this.clearBoard();
+        this.clear();
         this.drawBoard();
         this.cursorStatic < 5 && this.squares[this.cursor].fillCursor();
-        this.blocks.forEach( ({i}) => this.squares[i].fillBlock())
+        this.blocks.forEach( ({i}) => this.squares[i].fillBlock());
+        this.duplicates.forEach( i => this.squares[i].fillBlock('purple'))
+        this.duplicates = []
     }
 
     // play() {
