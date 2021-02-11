@@ -78,7 +78,6 @@ class Board {
     }
 
     setBarrierT(i) {
-        console.log(this.decrementRow(i))
         this.barriers[i].toggleTop()
         this.barriers[this.decrementRow(i)].toggleBottom()
     }
@@ -95,7 +94,7 @@ class Board {
     hasCollidedE = (i) => this.blocks.find(block => block.i === this.incrementCol(i)) || this.barriers[i].right
     hasCollidedW = (i) => this.blocks.find(block => block.i === this.decrementCol(i)) || this.barriers[i].left
 
-    calculateEvents() {
+    calculateNextMoves() {
         let newBlocks = []
         for (let x = 0; x < this.blocks.length; x++) {
             const { i, direction } = this.blocks[x]
@@ -143,29 +142,16 @@ class Board {
         this.duplicates = []
     }
 
-    // play() {
-    //     for (let x = 0; x < this.squares.length; x++) {
-    //         let square = this.squares[x]
-    //         if(square.active) {
-    //             let thisSquare = square.i
-    //             let hasCollided
-    //             switch(square.direction) {
-    //                 case 'n':
-    //                     hasCollided = this.hasCollidedN(thisSquare)
-    //                     break;
-    //                 case 's':
-    //                     hasCollided = this.hasCollidedS(thisSquare)
-    //                     break;
-    //                 case 'e':
-    //                     hasCollided = this.hasCollidedE(thisSquare)
-    //                     break;
-    //                 case 'w':
-    //                     hasCollided = this.hasCollidedW(thisSquare)
-    //             };
-    //             (hasCollided && (this.notes[thisSquare].play()))
-    //         }
-    //     }
-    // }
+    // TODO: move synth into blocks
+    play() {
+        for (let x = 0; x < this.blocks.length; x++) {
+            const { i, direction } = this.blocks[x];
+            (direction === 'n' && this.hasCollidedN(i) ||
+            direction === 's' && this.hasCollidedS(i) ||
+            direction === 'e' && this.hasCollidedE(i) ||
+            direction === 'w' && this.hasCollidedW(i)) && this.notes[i].play()
+        }
+    }
 }
 
 export default Board
