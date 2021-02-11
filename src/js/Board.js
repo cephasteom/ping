@@ -78,6 +78,7 @@ class Board {
     }
 
     setBarrierT(i) {
+        console.log(this.decrementRow(i))
         this.barriers[i].toggleTop()
         this.barriers[this.decrementRow(i)].toggleBottom()
     }

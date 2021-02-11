@@ -7,7 +7,6 @@ import Board from './js/Board'
 import * as Tone from 'tone'
 import './styles/index.scss'
 
-
 let board = new Board(15, 15, ["d", "e", "f", "a", "c"])
 
 document.addEventListener('keydown', function(e) {
