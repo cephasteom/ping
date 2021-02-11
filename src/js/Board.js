@@ -59,12 +59,12 @@ class Board {
     incrementCol = i => (i + 1) % this.cols + (Math.floor(i / this.cols) * this.cols)
 
     setCursor(key) {
-        this.squares[this.cursor].clearCursor();
+        this.squares[this.cursor].clear();
         (key === 'ArrowUp' && (this.cursor = this.decrementRow(this.cursor))) ||
         (key === 'ArrowDown' && (this.cursor = this.incrementRow(this.cursor))) ||
         (key === 'ArrowLeft' && (this.cursor = this.decrementCol(this.cursor))) ||
         (key === 'ArrowRight' && (this.cursor = this.incrementCol(this.cursor)))
-        this.squares[this.cursor].fillCursor()
+        this.squares[this.cursor].fillBlock('blue')
         this.cursorStatic = 0
     }
 
@@ -73,13 +73,13 @@ class Board {
     }
 
     setBarrierL(i) {
-        this.barriers[i].left = !this.barriers[i].left
-        this.barriers[this.decrementCol(i)].right = this.barriers[i].left
+        this.barriers[i].toggleLeft()
+        this.barriers[this.decrementCol(i)].toggleRight()
     }
 
     setBarrierT(i) {
-        this.barriers[i].top = !this.barriers[i].top
-        this.barriers[this.decrementRow(i)].bottom = this.barriers[i].top
+        this.barriers[i].toggleTop()
+        this.barriers[this.decrementRow(i)].toggleBottom()
     }
 
     createBarrier(side) {
@@ -136,7 +136,7 @@ class Board {
     draw() {
         this.clear();
         this.drawBoard();
-        this.cursorStatic < 5 && this.squares[this.cursor].fillCursor();
+        this.cursorStatic < 5 && this.squares[this.cursor].fillBlock('blue');
         this.blocks.forEach( ({i}) => this.squares[i].fillBlock());
         this.duplicates.forEach( i => this.squares[i].fillBlock('purple'))
         this.duplicates = []

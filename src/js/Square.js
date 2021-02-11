@@ -5,8 +5,6 @@ class Square {
         this.row = row
         this.size = size
         this.i = i
-        this.active = false
-        this.direction = null
         this.top = false
         this.left = false
         this.getXY()
@@ -15,11 +13,7 @@ class Square {
         this.x = this.col * this.size
         this.y = this.row * this.size
     }
-    fillCursor() {
-        context.fillStyle = 'blue'
-        this.fill()
-    }
-    clearCursor() {
+    clear() {
         context.fillStyle = 'black'
         this.fill()
     }

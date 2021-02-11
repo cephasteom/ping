@@ -1,3 +1,4 @@
+import { theWindow } from 'tone/build/esm/core/context/AudioContext'
 import { context } from './setup-canvas'
 class Barrier {
     constructor(col, row, size) {
@@ -10,6 +11,12 @@ class Barrier {
         this.size = size
         this.getXY()
     }
+    
+    toggleLeft = () => this.left = !this.left
+    toggleRight = () => this.right = !this.right
+    toggleTop = () => this.top = !this.top
+    toggleBottom = () => this.bottom = !this.bottom
+
     getXY() {
         this.x = this.col * this.size
         this.y = this.row * this.size
