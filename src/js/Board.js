@@ -110,7 +110,8 @@ class Board {
             };
             (hasCollided && block.play(this.squares[i].note, time));
             
-            let duplicate = newBlocks.find(block => block.i === nextI)
+            let duplicate = newBlocks.find(block => block.i === nextI);
+            duplicate && duplicate.synth.cleanUp() && block.synth.cleanUp();
             duplicate ? 
                 (newBlocks = newBlocks.filter(block => block !== duplicate)) && this.duplicates.push(duplicate.i)
                 : 
