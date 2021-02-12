@@ -1,6 +1,5 @@
 import { context } from './setup-canvas'
 import Square from './Square'
-import Note from './Note'
 import Barrier from './Barrier'
 import Block from './Block'
 import Synth from './Synth'
@@ -38,13 +37,13 @@ class Board {
     }
     
     getSquareIndex = (col, row) => (this.cols * row) + col
-
-    clearBoard = () => context.clearRect(0, 0, window.innerWidth, window.innerHeight)
-
+    
     decrementRow = i => (this.squares.length + (i - this.cols)) % this.squares.length
     incrementRow = i => (i + this.cols) % this.squares.length
     decrementCol = i => (this.squares.length + (i - 1)) % this.cols + (Math.floor(i / this.cols) * this.cols)
     incrementCol = i => (i + 1) % this.cols + (Math.floor(i / this.cols) * this.cols)
+    
+    clearBoard = () => context.clearRect(0, 0, window.innerWidth, window.innerHeight)
 
     setCursor(key) {
         this.squares[this.cursor].clear();
@@ -58,21 +57,21 @@ class Board {
 
     createBlock = (direction) => this.blocks.push(new Block(this.cursor, direction, new Synth()))
 
-    setBarrierL(i) {
+    createBarrierL(i) {
         this.barriers[i].toggleLeft()
         this.barriers[this.decrementCol(i)].toggleRight()
     }
 
-    setBarrierT(i) {
+    createBarrierT(i) {
         this.barriers[i].toggleTop()
         this.barriers[this.decrementRow(i)].toggleBottom()
     }
 
     createBarrier(side) {
-        (side === 'l' && (this.setBarrierL(this.cursor))) ||
-        (side === 'r' && (this.setBarrierL(this.incrementCol(this.cursor)))) ||
-        (side === 't' && (this.setBarrierT(this.cursor))) ||
-        (side === 'b' && (this.setBarrierT(this.incrementRow(this.cursor))))
+        (side === 'l' && (this.createBarrierL(this.cursor))) ||
+        (side === 'r' && (this.createBarrierL(this.incrementCol(this.cursor)))) ||
+        (side === 't' && (this.createBarrierT(this.cursor))) ||
+        (side === 'b' && (this.createBarrierT(this.incrementRow(this.cursor))))
     }
 
     hasCollidedN = (i) => this.blocks.find(block => block.i === this.decrementRow(i)) || this.barriers[i].top
