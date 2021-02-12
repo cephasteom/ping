@@ -5,25 +5,34 @@ import Barrier from './Barrier'
 import Block from './Block'
 
 class Board {
-    constructor(cols, rows, scale) {
-        this.cols = cols
-        this.rows = rows
+    constructor(scale) {
+        this.scale = scale
+        this.cols = scale.length
+        this.rows = scale.length
         this.size = 20
         this.cursor = 0
         this.cursorStatic = 0
         this.squares = this.initSquares()
         this.barriers = this.initBarriers()
-        this.notes = this.initNotes(scale)
+        this.notes = this.initNotes()
         this.blocks = []
         this.duplicates = [] // when blocks arrive at the same square together
     }
 
-    initNotes(scale) {
-        const singleRow = new Array(this.cols).fill(null)
-            .map((n, i) => `${scale[i % scale.length]}${Math.floor((i % this.cols) / scale.length) + 3}`)
+    initNotes() {
+        let notes = new Array(this.cols * this.rows).fill(null)
+        for(let i = 0; i < notes.length; i++) {
+            notes[i] = new Note(this.scale[(i % this.cols)])
+        }
+        return notes
+            
 
-        return new Array(this.cols * this.rows).fill(null)
-            .map((n, i) => new Note(singleRow[ i % this.cols ]))
+
+        // const singleRow = new Array(this.cols).fill(null)
+        //     .map((n, i) => `${scale[i % scale.length]}${Math.floor((i % this.cols) / scale.length) + 3}`)
+
+        // return new Array(this.cols * this.rows).fill(null)
+        //     .map((n, i) => new Note(singleRow[ i % this.cols ]))
     }
 
     initSquares() {
