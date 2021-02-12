@@ -5,10 +5,10 @@ class Note {
         this.note = note
         this.active = false
         this.gain = new Tone.Gain(0.25).connect(output)
-        this.synth = new Tone.Synth({oscillator: {type: 'sine'}}).connect(this.gain)
+        this.synth = new Tone.FMSynth({oscillator: {type: 'sine'}}).connect(this.gain)
     }
-    play() {
-        this.synth.triggerAttackRelease(this.note, "8n");
+    play(time) {
+        this.synth.triggerAttackRelease(this.note, "8n", time);
         this.reset()
     }
     reset() {

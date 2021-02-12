@@ -20,16 +20,11 @@ document.addEventListener('keydown', function(e) {
     if(['t', 'b', 'l', 'r'].includes(e.key)) board.createBarrier(e.key)
 });
 
-// data - calculate on every off 16th to give it time to calculate
-new Tone.Loop(() => {
-    board.calculateNextMoves()
-}, "8n").start("16n");
-
-// visuals / sound - draw on every 4th 
-
-new Tone.Loop(() => {
-    board.play()
-    board.draw()
+new Tone.Loop(time => {
+    board.clear()
+    board.drawBlocks()
+    board.playAndMoveBlocks(time)
+    board.drawBoard()
 }, "8n").start(0);
 
 Tone.Transport.start();

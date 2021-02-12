@@ -25,14 +25,6 @@ class Board {
             notes[i] = new Note(this.scale[(i % this.cols)])
         }
         return notes
-            
-
-
-        // const singleRow = new Array(this.cols).fill(null)
-        //     .map((n, i) => `${scale[i % scale.length]}${Math.floor((i % this.cols) / scale.length) + 3}`)
-
-        // return new Array(this.cols * this.rows).fill(null)
-        //     .map((n, i) => new Note(singleRow[ i % this.cols ]))
     }
 
     initSquares() {
@@ -51,12 +43,6 @@ class Board {
     }
     
     getSquareIndex = (col, row) => (this.cols * row) + col
-    
-    drawBoard() {
-        for (var x = 0; x < this.barriers.length; x++) {
-            this.barriers[x].draw()
-        }
-    }
 
     clear() {
         context.clearRect(0, 0, window.innerWidth, window.innerHeight)
@@ -103,7 +89,7 @@ class Board {
     hasCollidedE = (i) => this.blocks.find(block => block.i === this.incrementCol(i)) || this.barriers[i].right
     hasCollidedW = (i) => this.blocks.find(block => block.i === this.decrementCol(i)) || this.barriers[i].left
 
-    calculateNextMoves() {
+    playAndMoveBlocks(time) {
         let newBlocks = []
         for (let x = 0; x < this.blocks.length; x++) {
             const { i, direction } = this.blocks[x]
@@ -131,6 +117,7 @@ class Board {
                     nextI = hasCollided ? this.incrementCol(i) : this.decrementCol(i)
                     nextDirection = hasCollided ? 'e' : 'w'
             };
+            hasCollided && this.notes[i].play(time);
             let duplicate = newBlocks.find(block => block.i === nextI)
             duplicate ? 
                 (newBlocks = newBlocks.filter(block => block !== duplicate)) && this.duplicates.push(duplicate.i)
@@ -142,24 +129,15 @@ class Board {
         this.cursorStatic++
     }
 
-    draw() {
-        this.clear();
-        this.drawBoard();
-        this.cursorStatic < 5 && this.squares[this.cursor].fillBlock('blue');
+    drawBlocks() {
         this.blocks.forEach( ({i}) => this.squares[i].fillBlock());
         this.duplicates.forEach( i => this.squares[i].fillBlock('purple'))
         this.duplicates = []
     }
-
-    // TODO: move synth into blocks
-    play() {
-        for (let x = 0; x < this.blocks.length; x++) {
-            const { i, direction } = this.blocks[x];
-            (direction === 'n' && this.hasCollidedN(i) ||
-            direction === 's' && this.hasCollidedS(i) ||
-            direction === 'e' && this.hasCollidedE(i) ||
-            direction === 'w' && this.hasCollidedW(i)) && this.notes[i].play()
-        }
+    
+    drawBoard() {
+        this.cursorStatic < 5 && this.squares[this.cursor].fillBlock('blue');
+        this.barriers.forEach(barrier => barrier.draw())
     }
 }
 

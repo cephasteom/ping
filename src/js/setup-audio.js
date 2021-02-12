@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 
-const limiter = new Tone.Limiter(-10).toDestination()
+const limiter = new Tone.Limiter(0).toDestination()
 export const output = new Tone.Reverb({
                                     "wet": 0.5,
                                     "decay": 10,
