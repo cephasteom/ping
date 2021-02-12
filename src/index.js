@@ -28,7 +28,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 new Tone.Loop(time => {
-    board.clear()
+    board.clearBoard()
     board.drawBlocks()
     board.playAndMoveBlocks(time)
     board.drawBoard()

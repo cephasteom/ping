@@ -45,9 +45,7 @@ class Board {
     
     getSquareIndex = (col, row) => (this.cols * row) + col
 
-    clear() {
-        context.clearRect(0, 0, window.innerWidth, window.innerHeight)
-    }
+    clearBoard = () => context.clearRect(0, 0, window.innerWidth, window.innerHeight)
 
     decrementRow = i => (this.squares.length + (i - this.cols)) % this.squares.length
     incrementRow = i => (i + this.cols) % this.squares.length
@@ -64,9 +62,7 @@ class Board {
         this.cursorStatic = 0
     }
 
-    createBlock(direction) {
-        this.blocks.push(new Block(this.cursor, direction, new Synth()))
-    }
+    createBlock = (direction) => this.blocks.push(new Block(this.cursor, direction, new Synth()))
 
     setBarrierL(i) {
         this.barriers[i].toggleLeft()
