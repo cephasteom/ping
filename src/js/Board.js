@@ -3,6 +3,7 @@ import Square from './Square'
 import Note from './Note'
 import Barrier from './Barrier'
 import Block from './Block'
+import Synth from './Synth'
 
 class Board {
     constructor(scale) {
@@ -64,7 +65,7 @@ class Board {
     }
 
     createBlock(direction) {
-        this.blocks.push(new Block(this.cursor, direction))
+        this.blocks.push(new Block(this.cursor, direction, new Synth()))
     }
 
     setBarrierL(i) {
@@ -118,15 +119,13 @@ class Board {
                     nextI = hasCollided ? this.incrementCol(i) : this.decrementCol(i)
                     nextDirection = hasCollided ? 'e' : 'w'
             };
-            // (hasCollided && block.play(this.notes[i].note, time));
-            newBlocks.push(new Block(nextI, nextDirection));
+            (hasCollided && block.play(this.notes[i].note, time));
             
-            
-            // let duplicate = newBlocks.find(block => block.i === nextI)
-            // duplicate ? 
-            //     (newBlocks = newBlocks.filter(block => block !== duplicate)) && this.duplicates.push(duplicate.i)
-            //     : 
-            //     newBlocks.push(new Block(nextI, nextDirection));
+            let duplicate = newBlocks.find(block => block.i === nextI)
+            duplicate ? 
+                (newBlocks = newBlocks.filter(block => block !== duplicate)) && this.duplicates.push(duplicate.i)
+                : 
+                newBlocks.push(new Block(nextI, nextDirection, block.synth));            
             
         }
         this.blocks = newBlocks
@@ -134,7 +133,6 @@ class Board {
     }
 
     drawBlocks() {
-        console.log(this.blocks)
         this.blocks.forEach( ({i}) => this.squares[i].fillBlock());
         this.duplicates.forEach( i => this.squares[i].fillBlock('purple'))
         this.duplicates = []

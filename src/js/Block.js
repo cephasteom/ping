@@ -1,14 +1,13 @@
 import { output } from './setup-audio'
 import * as Tone from 'tone'
 class Block {
-    constructor(i, direction) {
+    constructor(i, direction, synth) {
         this.i = i
         this.direction = direction
-        this.gain = new Tone.Gain(0.25).connect(output)
-        this.synth = new Tone.FMSynth({oscillator: {type: 'sine'}}).connect(this.gain)
+        this.synth = synth
     }
     play(note, time) {
-        // this.synth.triggerAttackRelease(note, "8n", time);
+        this.synth.synth.triggerAttackRelease(note, "8n", time);
     }
 }
 
