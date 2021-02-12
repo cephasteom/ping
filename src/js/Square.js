@@ -1,12 +1,11 @@
 import { context } from './setup-canvas'
 class Square {
-    constructor(col, row, size, i) {
+    constructor(col, row, size, i, note) {
         this.col = col
         this.row = row
         this.size = size
         this.i = i
-        this.top = false
-        this.left = false
+        this.note = note
         this.getXY()
     }
     getXY() {

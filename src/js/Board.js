@@ -15,25 +15,19 @@ class Board {
         this.cursorStatic = 0
         this.squares = this.initSquares()
         this.barriers = this.initBarriers()
-        this.notes = this.initNotes()
         this.blocks = []
         this.duplicates = [] // when blocks arrive at the same square together
-    }
-
-    initNotes() {
-        let notes = new Array(this.cols * this.rows).fill(null)
-        for(let i = 0; i < notes.length; i++) {
-            notes[i] = new Note(this.scale[(i % this.cols)])
-        }
-        return notes
     }
 
     initSquares() {
         return new Array(this.cols * this.rows)
             .fill(null)
             .map((n, i) => new Square( 
-                (i % this.cols), Math.floor(i / this.cols), 
-                this.size, this.getSquareIndex((i % this.cols), Math.floor(i / this.cols))
+                (i % this.cols), 
+                Math.floor(i / this.cols), 
+                this.size, 
+                this.getSquareIndex((i % this.cols), Math.floor(i / this.cols)),
+                this.scale[(i % this.cols)]
             ))
     }
 
@@ -115,7 +109,7 @@ class Board {
                     nextI = hasCollided ? this.incrementCol(i) : this.decrementCol(i)
                     nextDirection = hasCollided ? 'e' : 'w'
             };
-            (hasCollided && block.play(this.notes[i].note, time));
+            (hasCollided && block.play(this.squares[i].note, time));
             
             let duplicate = newBlocks.find(block => block.i === nextI)
             duplicate ? 
