@@ -6,7 +6,10 @@ class Synth {
     }
     init() { 
         this.gain = new Tone.Gain(0.25).connect(output)
-        this.synth = new Tone.FMSynth({oscillator: {type: 'sine'}, modulationIndex: 2}).connect(this.gain)
+        this.synth = new Tone.FMSynth({
+            oscillator: {type: 'sine'}, 
+            modulationIndex: 2
+        }).connect(this.gain)
     }
     cleanUp() {
         this.synth.triggerRelease()

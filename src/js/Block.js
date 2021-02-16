@@ -7,7 +7,7 @@ class Block {
         this.synth = synth
     }
     play(note, time) {
-        this.synth.synth.triggerAttackRelease(note, "8n", time);
+        this.synth.synth.triggerAttackRelease(note, "8n");
     }
 }
 
