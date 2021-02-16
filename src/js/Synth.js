@@ -1,5 +1,6 @@
 import * as Tone from 'tone'
 import { output } from './setup-audio'
+import { scale } from './utils'
 class Synth {
     constructor() {
         this.init()
@@ -13,9 +14,11 @@ class Synth {
             }
         }).connect(this.tremolo)
     }
-    cleanUp() {
-        this.synth.triggerRelease()
-        setTimeout(() => this.synth.dispose(), 2000)
+    play(letter, octave) {
+        this.synth.envelope.attack = scale(0, 6, 0.1, 0.01, octave)
+        this.synth.envelope.release = scale(0, 6, 0.1, 1, octave)
+        this.synth.volume.value = scale(0, 6, -10, -5, octave)
+        this.synth.triggerAttackRelease(`${letter}${octave}`, "16n");
     }
 }
 
