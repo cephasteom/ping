@@ -5,18 +5,15 @@ class Synth {
         this.init()
     }
     init() { 
-        this.gain = new Tone.Gain(0.25).connect(output)
         this.synth = new Tone.FMSynth({
             oscillator: {type: 'sine'}, 
             modulationIndex: 2
-        }).connect(this.gain)
+        }).connect(output)
+        this.synth.volume.value = -5
     }
     cleanUp() {
         this.synth.triggerRelease()
-        setTimeout(() => {
-            this.synth.dispose("+1")
-            this.gain.dispose("+1")
-        }, 2000)
+        setTimeout(() => this.synth.dispose(), 2000)
     }
 }
 

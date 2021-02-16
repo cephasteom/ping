@@ -19,7 +19,7 @@ document.addEventListener('keydown', async () => {
     if(audioIsRunning) return
 	await Tone.start()
     audioIsRunning = true
-	console.log('audio is ready')
+    Tone.Transport.start();
 })
 document.addEventListener('keydown', function(e) {
     if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) board.setCursor(e.key)
@@ -33,5 +33,3 @@ new Tone.Loop(time => {
     board.playAndMoveBlocks(time)
     board.drawBoard()
 }, "8n").start(0);
-
-Tone.Transport.start();
