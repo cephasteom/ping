@@ -60,18 +60,32 @@ class Board {
     createBarrierL(i) {
         this.barriers[i].toggleLeft()
         this.barriers[this.decrementCol(i)].toggleRight()
+        this.barriers[i].toggleRenderLeft()
     }
 
     createBarrierT(i) {
         this.barriers[i].toggleTop()
         this.barriers[this.decrementRow(i)].toggleBottom()
+        this.barriers[i].toggleRenderTop()
+    }
+
+    createBarrierR(i) {
+        this.barriers[i].toggleRight()
+        this.barriers[this.incrementCol(i)].toggleLeft()
+        this.barriers[i].toggleRenderRight()
+    }
+
+    createBarrierB(i) {
+        this.barriers[i].toggleBottom()
+        this.barriers[this.incrementRow(i)].toggleTop()
+        this.barriers[i].toggleRenderBottom()
     }
 
     createBarrier(side) {
         (side === 'l' && (this.createBarrierL(this.cursor))) ||
-        (side === 'r' && (this.createBarrierL(this.incrementCol(this.cursor)))) ||
+        (side === 'r' && (this.createBarrierR(this.cursor))) ||
         (side === 't' && (this.createBarrierT(this.cursor))) ||
-        (side === 'b' && (this.createBarrierT(this.incrementRow(this.cursor))))
+        (side === 'b' && (this.createBarrierB(this.cursor)))
     }
 
     hasCollidedN = (i) => this.blocks.find(block => block.i === this.decrementRow(i)) || this.barriers[i].top

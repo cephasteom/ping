@@ -9,6 +9,10 @@ class Barrier {
         this.col = col
         this.row = row
         this.size = size
+        this.renderTop = false
+        this.renderLeft = false
+        this.renderBottom = false
+        this.renderRight = false
         this.getXY()
     }
     
@@ -17,15 +21,20 @@ class Barrier {
     toggleTop = () => this.top = !this.top
     toggleBottom = () => this.bottom = !this.bottom
 
+    toggleRenderLeft = () => this.renderLeft = !this.renderLeft
+    toggleRenderRight = () => this.renderRight = !this.renderRight
+    toggleRenderTop = () => this.renderTop = !this.renderTop
+    toggleRenderBottom = () => this.renderBottom = !this.renderBottom
+
     getXY() {
         this.x = this.col * this.size
         this.y = this.row * this.size
     }
     draw() {
-        this.left && this.fillLeft()
-        this.top && this.fillTop()
-        this.right && this.fillRight()
-        this.bottom && this.fillBottom()
+        this.renderLeft && this.fillLeft()
+        this.renderTop && this.fillTop()
+        this.renderRight && this.fillRight()
+        this.renderBottom && this.fillBottom()
     }
     fillLeft() {
         context.beginPath()
