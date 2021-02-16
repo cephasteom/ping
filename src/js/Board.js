@@ -56,6 +56,7 @@ class Board {
     }
 
     createBlock = (direction) => this.blocks.push(new Block(this.cursor, direction, new Synth()))
+    removeBlock = () => this.blocks.pop().cleanUp()
 
     createBarrierL(i) {
         this.barriers[i].toggleLeft()

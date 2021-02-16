@@ -11,6 +11,7 @@ class Block {
         const letter = note[0]
         this.synth.play(letter, octave)
     }
+    cleanUp = () => this.synth.synth.dispose()
 }
 
 export default Block;

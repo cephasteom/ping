@@ -12,6 +12,7 @@ document.addEventListener('keydown', async () => {
     Tone.Transport.start();
 })
 document.addEventListener('keydown', function(e) {
+    if((e.ctrlKey || e.metaKey) && e.key === 'z') board.removeBlock() 
     if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) board.setCursor(e.key)
     if(['n', 's', 'e', 'w'].includes(e.key)) board.createBlock(e.key)
     if(['t', 'b', 'l', 'r'].includes(e.key)) board.createBarrier(e.key)
