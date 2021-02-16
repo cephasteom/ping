@@ -5,11 +5,13 @@ class Synth {
         this.init()
     }
     init() { 
+        this.tremolo = new Tone.Tremolo(9, 0.75).connect(output)
         this.synth = new Tone.MonoSynth({
             oscillator: {type: 'sine'}, 
-            modulationIndex: 1
-        }).connect(output)
-        this.synth.volume.value = -5
+            envelope: {
+                release: 2
+            }
+        }).connect(this.tremolo)
     }
     cleanUp() {
         this.synth.triggerRelease()
