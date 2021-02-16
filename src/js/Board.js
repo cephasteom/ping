@@ -80,6 +80,9 @@ class Board {
     hasCollidedW = (i) => this.blocks.find(block => block.i === this.decrementCol(i)) || this.barriers[i].left
 
     playAndMoveBlocks(time) {
+        this.duplicates.forEach( block => block.play(this.squares[block.i].note, true))
+        this.duplicates = []
+
         let newBlocks = []
         for (let x = 0; x < this.blocks.length; x++) {
             const block = this.blocks[x]
@@ -108,24 +111,22 @@ class Board {
                     nextI = hasCollided ? this.incrementCol(i) : this.decrementCol(i)
                     nextDirection = hasCollided ? 'e' : 'w'
             };
-            (hasCollided && block.play(this.squares[i].note, time));
             
-            let duplicate = newBlocks.find(block => block.i === nextI);
-            !!duplicate && duplicate.synth.cleanUp() && block.synth.cleanUp();
-            duplicate ? 
-                (newBlocks = newBlocks.filter(block => block !== duplicate)) && this.duplicates.push(duplicate.i)
-                : 
-                newBlocks.push(new Block(nextI, nextDirection, block.synth));            
+            let newBlock = new Block(nextI, nextDirection, block.synth)
+            let isDuplicate = !!newBlocks.find(block => block.i === nextI);
             
+            (hasCollided && block.play(this.squares[i].note), false);
+            
+            newBlocks.push(newBlock)
+            if(isDuplicate) this.duplicates.push(newBlock)
         }
         this.blocks = newBlocks
         this.cursorStatic++
     }
 
-    drawBlocks() {
+    drawBlocks(time) {
         this.blocks.forEach( ({i}) => this.squares[i].fillBlock());
-        this.duplicates.forEach( i => this.squares[i].fillBlock('purple'))
-        this.duplicates = []
+        this.duplicates.forEach( block => this.squares[block.i].fillBlock('purple'))
     }
     
     drawBoard() {

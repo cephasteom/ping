@@ -1,13 +1,15 @@
-import { output } from './setup-audio'
-import * as Tone from 'tone'
+import { scale } from './utils'
 class Block {
     constructor(i, direction, synth) {
         this.i = i
         this.direction = direction
         this.synth = synth
     }
-    play(note, time) {
-        this.synth.synth.triggerAttackRelease(note, "8n", time);
+    play(note, transpose=false) {
+        const octave = parseInt( note.split("").pop() ) + (transpose ? 1 : 0) 
+        const nn = note[0]
+        this.synth.synth.envelope.attack = scale(0, 6, 0.1, 0.5, octave)
+        this.synth.synth.triggerAttackRelease(`${nn}${octave}`, "16n");
     }
 }
 

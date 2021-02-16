@@ -5,9 +5,9 @@ class Synth {
         this.init()
     }
     init() { 
-        this.synth = new Tone.FMSynth({
+        this.synth = new Tone.MonoSynth({
             oscillator: {type: 'sine'}, 
-            modulationIndex: 2
+            modulationIndex: 1
         }).connect(output)
         this.synth.volume.value = -5
     }
