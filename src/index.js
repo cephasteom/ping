@@ -19,7 +19,13 @@ document.addEventListener('keydown', function(e) {
 });
 
 new Tone.Loop(time => {
-    board.clearBoard()
     board.playDrawMoveBlocks()
-    board.drawBoard()
 }, "8n").start(0);
+
+let step = 0
+new Tone.Loop(time => {
+    board.clearBoard()
+    step = (step + 1) % board.size
+    board.drawBlocks(step)
+    board.drawBoard()
+}, `${8*board.size}n`).start(0);

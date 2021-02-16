@@ -142,11 +142,11 @@ class Board {
         this.cursorStatic++
     }
 
-    drawBlocks() {
-        this.blocks.forEach( ({i, hasCollided}) => this.squares[i].fillBlock(hasCollided ? 'white' : 'red'));
+    drawBlocks(step = 0) {
+        this.blocks.forEach( ({i, hasCollided}) => this.squares[i].fillBlock(hasCollided ? 'white' : 'red', step));
         this.duplicates.forEach( block => {
             block.play(this.squares[block.i].note, true)
-            this.squares[block.i].fillBlock('purple')
+            this.squares[block.i].fillBlock('purple', step)
         })
         this.duplicates = []    
     }
