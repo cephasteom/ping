@@ -4,6 +4,7 @@ class Block {
         this.i = i
         this.direction = direction
         this.synth = synth
+        this.hasCollided = false
     }
     play(note, transpose=false) {
         const octave = parseInt( note.split("").pop() ) + (transpose ? 1 : 0) 
